@@ -37,6 +37,12 @@ class Player {
     c.fill()
     c.closePath()
   }
+
+  update() {
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+  }
 }
 
 let map = [
@@ -65,11 +71,17 @@ map.forEach((row, i) => {
   })
 })
 
+function animate() {
+  window.requestAnimationFrame(animate)
+  player.update()
+}
+
+animate()
+
 boundaries.forEach(boundary => {
   boundary.draw()
 })
 
-player.draw()
 
 window.addEventListener('keydown', (event) => {
   let key = event.key
@@ -80,7 +92,7 @@ window.addEventListener('keydown', (event) => {
       player.velocity.y = -5
       break;
     case "a":
-      player.velocity.x = 5
+      player.velocity.x = -5
       break;
     case "s":
       player.velocity.y = 5
