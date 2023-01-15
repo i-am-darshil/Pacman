@@ -140,6 +140,9 @@ const map = [
   ['4', '-', '-', '-', '-', '-', '-', '-', '-', '-', '3']
 ]
 
+canvas.width = map[0].length * BOUNDARY_WIDTH
+canvas.height = map.length * BOUNDARY_HEIGHT
+
 let keys = {
   w : {
     pressed: false

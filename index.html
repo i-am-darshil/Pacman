@@ -14,13 +14,21 @@
       color: white;
       font-family: sans-serif;
       margin-bottom: 20px;
+      text-align: center;
+    }
+    #container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   </style>
   <title>Pacman</title>
 </head>
 <body>
   <p><span>Score : <span id="score">0</span></p>
-  <canvas></canvas>
+  <div id="container">
+    <canvas></canvas>
+  </div>
   <script src="index.js"></script>
 </body>
 </html>
