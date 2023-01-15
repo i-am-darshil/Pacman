@@ -9,6 +9,7 @@ canvas.height = window.innerHeight
 BOUNDARY_WIDTH = 40
 BOUNDARY_HEIGHT = 40
 
+PLAYER_SPEED = 2
 
 class Boundary {
   constructor(position) {
@@ -46,11 +47,11 @@ class Player {
 }
 
 let map = [
-  ["-", "-", "-", "-", "-", "-"],
-  ["-", " ", " ", " ", " ", "-"],
-  ["-", " ", "-", "-", " ", "-"],
-  ["-", " ", " ", " ", " ", "-"],
-  ["-", "-", "-", "-", "-", "-"]
+  ["-", "-", "-", "-", "-", "-", "-"],
+  ["-", " ", " ", " ", " ", " ", "-"],
+  ["-", " ", "-", " ", "-", " ", "-"],
+  ["-", " ", " ", " ", " ", " ", "-"],
+  ["-", "-", "-", "-", "-", "-", "-"]
 ]
 
 let boundaries = []
@@ -88,17 +89,15 @@ function animate() {
     let boundaryRight = boundary.position.x + BOUNDARY_WIDTH
 
     if (
-      playerTop <= boundaryBottom &&
-      playerBottom >= boundaryTop &&
-      playerLeft <= boundaryRight &&
-      playerRight >= boundaryLeft
+      playerTop + player.velocity.y <= boundaryBottom &&
+      playerBottom + player.velocity.y >= boundaryTop &&
+      playerLeft + player.velocity.x <= boundaryRight &&
+      playerRight + player.velocity.x >= boundaryLeft
     ) {
       console.log("COLLISION")
       player.velocity.x = 0
       player.velocity.y = 0
     }
-
-
 
   })
   player.update()
@@ -116,18 +115,18 @@ window.addEventListener('keydown', (event) => {
   switch(key) {
     case "w":
       player.velocity.x = 0
-      player.velocity.y = -1
+      player.velocity.y = -PLAYER_SPEED
       break;
     case "a":
-      player.velocity.x = -1
+      player.velocity.x = -PLAYER_SPEED
       player.velocity.y = 0
       break;
     case "s":
       player.velocity.x = 0
-      player.velocity.y = 1
+      player.velocity.y = PLAYER_SPEED
       break;
     case "d":
-      player.velocity.x = 1
+      player.velocity.x = PLAYER_SPEED
       player.velocity.y = 0
       break;
   }
