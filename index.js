@@ -9,7 +9,7 @@ canvas.height = window.innerHeight
 BOUNDARY_WIDTH = 40
 BOUNDARY_HEIGHT = 40
 
-PLAYER_SPEED = 2
+PLAYER_SPEED = 3
 
 class Boundary {
   constructor(position) {
@@ -28,7 +28,11 @@ class Player {
   constructor(position, velocity) {
     this.position = position
     this.velocity = velocity
-    this.radius = 15
+    this.radius = 17
+    /*
+    Relationship between Velocity and radius of player
+    size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
+     */
   }
 
   draw() {
@@ -92,8 +96,6 @@ function animate() {
   window.requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
 
-  player.velocity.x = 0
-  player.velocity.y = 0
   if (keys.w.pressed && last_key == "w") {
     player.velocity.y = -PLAYER_SPEED
   } else if (keys.a.pressed && last_key == "a") {
