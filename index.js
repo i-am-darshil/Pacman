@@ -23,6 +23,22 @@ class Boundary {
   }
 }
 
+class Player {
+  constructor(position, velocity) {
+    this.position = position
+    this.velocity = velocity
+    this.radius = 15
+  }
+
+  draw() {
+    c.beginPath()
+    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    c.fillStyle = "yellow"
+    c.fill()
+    c.closePath()
+  }
+}
+
 let map = [
   ["-", "-", "-", "-", "-", "-"],
   ["-", " ", " ", " ", " ", "-"],
@@ -32,6 +48,9 @@ let map = [
 ]
 
 let boundaries = []
+// let player = new Player({x:40, y:40}, {x:0, y: 0})
+let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
+
 
 map.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -49,3 +68,5 @@ map.forEach((row, i) => {
 boundaries.forEach(boundary => {
   boundary.draw()
 })
+
+player.draw()
