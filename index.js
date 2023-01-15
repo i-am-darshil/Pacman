@@ -138,7 +138,7 @@ let boundaries = []
 let ghosts = [
   new Ghost(
     {x:BOUNDARY_WIDTH * 6 + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2},
-    {x:0, y:0}
+    {x:PLAYER_SPEED, y:0}
   )
 ]
 
@@ -483,29 +483,47 @@ function animate() {
     DIRECTIONS.forEach(d => {
       if (!collisions.includes(d)) {pathways.push(d)}
     })
-    // console.log(pathways)
     
-    let pathIndex = Math.floor(Math.random() * pathways.length);
-    let path = pathways[pathIndex]
-
-    switch(path) {
-      case "up":
-        ghost.velocity.x = 0
-        ghost.velocity.y = -PLAYER_SPEED
-        break
-      case "down":
-        ghost.velocity.x = 0
-        ghost.velocity.y = PLAYER_SPEED
-        break
-      case "left":
-        ghost.velocity.x = -PLAYER_SPEED
-        ghost.velocity.y = 0
-        break
-      case "right":
-        ghost.velocity.x = PLAYER_SPEED
-        ghost.velocity.y = 0
-        break
+    let ghost_direction = ""
+    if (ghost.velocity.x > 0) {
+      ghost_direction = "right"
     }
+    else if (ghost.velocity.x < 0) {
+      ghost_direction = "left"
+    }
+    else if (ghost.velocity.y > 0) {
+      ghost_direction = "down"
+    }
+    else if (ghost.velocity.y < 0) {
+      ghost_direction = "up"
+    }
+    console.log("pathways, ghost_direction", pathways, ghost_direction)
+
+    if (!pathways.includes(ghost_direction) || pathways.length > DIRECTIONS.length/2) {
+
+      let pathIndex = Math.floor(Math.random() * pathways.length);
+      let path = pathways[pathIndex]
+      console.log(path)
+      switch(path) {
+        case "up":
+          ghost.velocity.x = 0
+          ghost.velocity.y = -PLAYER_SPEED
+          break
+        case "down":
+          ghost.velocity.x = 0
+          ghost.velocity.y = PLAYER_SPEED
+          break
+        case "left":
+          ghost.velocity.x = -PLAYER_SPEED
+          ghost.velocity.y = 0
+          break
+        case "right":
+          ghost.velocity.x = PLAYER_SPEED
+          ghost.velocity.y = 0
+          break
+      }
+    }
+    
 
   }
 
