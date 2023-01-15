@@ -54,6 +54,21 @@ let map = [
   ["-", "-", "-", "-", "-", "-", "-"]
 ]
 
+let keys = {
+  w : {
+    pressed: false
+  },
+  a : {
+    pressed: false
+  },
+  s : {
+    pressed: false
+  },
+  d : {
+    pressed: false
+  }
+}
+
 let boundaries = []
 // let player = new Player({x:40, y:40}, {x:0, y: 0})
 let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
@@ -75,6 +90,20 @@ map.forEach((row, i) => {
 function animate() {
   window.requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
+
+  player.velocity.x = 0
+  player.velocity.y = 0
+  if (keys.w.pressed) {
+    player.velocity.y = -PLAYER_SPEED
+  } else if (keys.a.pressed) {
+    player.velocity.x = -PLAYER_SPEED
+  } else if (keys.s.pressed) {
+    player.velocity.y = PLAYER_SPEED
+  } else if (keys.d.pressed) {
+    player.velocity.x = PLAYER_SPEED
+  }
+
+
   boundaries.forEach(boundary => {
     boundary.draw()
 
@@ -114,20 +143,38 @@ window.addEventListener('keydown', (event) => {
 
   switch(key) {
     case "w":
-      player.velocity.x = 0
-      player.velocity.y = -PLAYER_SPEED
+      keys.w.pressed = true
       break;
     case "a":
-      player.velocity.x = -PLAYER_SPEED
-      player.velocity.y = 0
+      keys.a.pressed = true
       break;
     case "s":
-      player.velocity.x = 0
-      player.velocity.y = PLAYER_SPEED
+      keys.s.pressed = true
       break;
     case "d":
-      player.velocity.x = PLAYER_SPEED
-      player.velocity.y = 0
+      keys.d.pressed = true
+      break;
+  }
+
+  console.log(player.velocity)
+})
+
+window.addEventListener('keyup', (event) => {
+  let key = event.key.toLowerCase()
+  console.log("Key pressed up", event, key)
+
+  switch(key) {
+    case "w":
+      keys.w.pressed = false
+      break;
+    case "a":
+      keys.a.pressed = false
+      break;
+    case "s":
+      keys.s.pressed = false
+      break;
+    case "d":
+      keys.d.pressed = false
       break;
   }
 
