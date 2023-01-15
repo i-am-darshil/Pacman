@@ -20,5 +20,11 @@ class Boundary {
   }
 }
 
-let boundary = new Boundary({x: 0, y: 0})
-boundary.draw()
+let boundary1 = new Boundary({x: 0, y: 0})
+boundary1.draw()
+
+let boundary2 = new Boundary({x: 40, y: 0})
+boundary2.draw()
+
+let boundary3 = new Boundary({x: 80, y: 0})
+boundary3.draw()
