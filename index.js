@@ -12,15 +12,17 @@ BOUNDARY_HEIGHT = 40
 PLAYER_SPEED = 2
 
 class Boundary {
-  constructor(position) {
+  constructor(position, image) {
     this.position = position
     this.width = BOUNDARY_WIDTH
     this.height = BOUNDARY_HEIGHT
+    this.image = image
   }
 
   draw() {
-    c.fillStyle = "blue"
-    c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    // c.fillStyle = "blue"
+    // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    c.drawImage(this.image, this.position.x, this.position.y)
   }
 }
 
@@ -80,6 +82,8 @@ let last_key = ""
 let boundaries = []
 let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
 
+let image = new Image()
+image.src = "./img/pipeHorizontal.png"
 
 map.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -88,7 +92,9 @@ map.forEach((row, i) => {
       case "-":
         positionX = BOUNDARY_WIDTH*j
         positionY = BOUNDARY_HEIGHT*i
-        boundaries.push(new Boundary({x:positionX, y:positionY}))
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, image)
+        )
         break
     }
   })
