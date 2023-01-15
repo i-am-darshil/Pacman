@@ -309,7 +309,7 @@ map.forEach((row, i) => {
             {
               x: j * BOUNDARY_WIDTH + BOUNDARY_WIDTH/2,
               y: i * BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2
-            },
+            }
           )
         )
         break
@@ -382,9 +382,25 @@ function animate() {
     }
   }
 
-  pallets.forEach(pallet => {
+  // This can cause weird rendering issue
+  // pallets.forEach((pallet, i) => {
+  //   pallet.draw()
+  //   let dist = Math.hypot((pallet.position.x - player.position.x), (pallet.position.y - player.position.y))
+  //   if (dist < pallet.radius + player.radius) {
+  //     console.log("Player pallet collision")
+  //     pallets.splice(i, 1)
+  //   }
+  // })
+
+  for (let i = pallets.length - 1; i >= 0; i--) {
+    let pallet = pallets[i]
     pallet.draw()
-  })
+    let dist = Math.hypot((pallet.position.x - player.position.x), (pallet.position.y - player.position.y))
+    if (dist < pallet.radius + player.radius) {
+      console.log("Player pallet collision")
+      pallets.splice(i, 1)
+    }
+  }
 
   boundaries.forEach(boundary => {
     boundary.draw()
