@@ -36,6 +36,7 @@ class Player {
     this.velocity = velocity
     this.radius = 18
     this.radians = 0.75
+    this.openRate = 0.06
     /*
     Relationship between Velocity and radius of player
     size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
@@ -56,6 +57,9 @@ class Player {
     this.draw()
     this.position.x += this.velocity.x
     this.position.y += this.velocity.y
+
+    if (this.radians < 0 || this.radians > 0.75) this.openRate = -this.openRate
+    this.radians += this.openRate
   }
 }
 
