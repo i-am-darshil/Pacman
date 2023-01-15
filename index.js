@@ -52,6 +52,21 @@ class Player {
   }
 }
 
+class Pallet {
+  constructor(position) {
+    this.position = position
+    this.radius = 3
+  }
+
+  draw() {
+    c.beginPath()
+    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    c.fillStyle = "white"
+    c.fill()
+    c.closePath()
+  }
+}
+
 // Get template from : https://gist.github.com/i-am-darshil/543d2065e73f0244904cdca83076e8bc
 // Get images from : https://drive.google.com/drive/folders/1SCGzRY91ORs8QVUQ1Z2kYAB6eQaOaW7Y?usp=sharing
 const map = [
@@ -87,6 +102,7 @@ let keys = {
 
 let last_key = ""
 
+let pallets = []
 let boundaries = []
 let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
 
@@ -280,6 +296,23 @@ map.forEach((row, i) => {
           )
         )
         break
+      case '.':
+        pallets.push(
+          // new Pallet(
+          //   {
+          //     x: j * BOUNDARY_WIDTH,
+          //     y: i * BOUNDARY_HEIGHT
+          //   },
+          // )
+
+          new Pallet(
+            {
+              x: j * BOUNDARY_WIDTH + BOUNDARY_WIDTH/2,
+              y: i * BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2
+            },
+          )
+        )
+        break
     }
   })
 })
@@ -349,6 +382,9 @@ function animate() {
     }
   }
 
+  pallets.forEach(pallet => {
+    pallet.draw()
+  })
 
   boundaries.forEach(boundary => {
     boundary.draw()
