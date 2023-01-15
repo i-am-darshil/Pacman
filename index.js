@@ -37,6 +37,7 @@ class Player {
     this.radius = 18
     this.radians = 0.75
     this.openRate = 0.06
+    this.facingAngle = 0
     /*
     Relationship between Velocity and radius of player
     size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
@@ -46,7 +47,7 @@ class Player {
   draw() {
     c.beginPath()
     // Direction of angle movement is clockwise
-    c.arc(this.position.x, this.position.y, this.radius, this.radians, Math.PI * 2 - this.radians)
+    c.arc(this.position.x, this.position.y, this.radius, this.facingAngle + this.radians, this.facingAngle + Math.PI * 2 - this.radians)
     c.lineTo(this.position.x, this.position.y)
     c.fillStyle = "yellow"
     c.fill()
@@ -525,6 +526,19 @@ function animate() {
 
   })
   player.update()
+
+  if (player.velocity.x > 0) {
+    player.facingAngle = 0
+  }
+  else if (player.velocity.x < 0) {
+    player.facingAngle = Math.PI
+  }
+  else if (player.velocity.y > 0) {
+    player.facingAngle = Math.PI * (1/2)
+  }
+  else if (player.velocity.y < 0) {
+    player.facingAngle = Math.PI * (3/2)
+  }
 
   for (let i=ghosts.length-1; i>=0; i--) {
     let ghost = ghosts[i]
