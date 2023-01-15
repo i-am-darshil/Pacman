@@ -62,6 +62,7 @@ class Ghost {
     this.velocity = velocity
     this.radius = 18
     this.color = color
+    this.scared = false
     /*
     Relationship between Velocity and radius of player
     size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
@@ -71,7 +72,7 @@ class Ghost {
   draw() {
     c.beginPath()
     c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-    c.fillStyle = this.color
+    c.fillStyle = this.scared ? "blue" : this.color
     c.fill()
     c.closePath()
   }
@@ -93,6 +94,21 @@ class Pallet {
     c.beginPath()
     c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
     c.fillStyle = "white"
+    c.fill()
+    c.closePath()
+  }
+}
+
+class PowerUp {
+  constructor(position) {
+    this.position = position
+    this.radius = 12
+  }
+
+  draw() {
+    c.beginPath()
+    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    c.fillStyle = "cyan"
     c.fill()
     c.closePath()
   }
@@ -134,6 +150,7 @@ let keys = {
 let last_key = ""
 
 let pallets = []
+let powerups = []
 let boundaries = []
 let ghosts = [
   new Ghost(
@@ -144,6 +161,11 @@ let ghosts = [
     {x:BOUNDARY_WIDTH * 6 + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT*7 + BOUNDARY_HEIGHT/2},
     {x:PLAYER_SPEED, y:0},
     "pink"
+  ),
+  new Ghost(
+    {x:BOUNDARY_WIDTH * 4 + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT*7 + BOUNDARY_HEIGHT/2},
+    {x:PLAYER_SPEED, y:0},
+    "gray"
   )
 ]
 
@@ -356,6 +378,16 @@ map.forEach((row, i) => {
           )
         )
         break
+      case 'p':
+        powerups.push(
+          new PowerUp(
+            {
+              x: j * BOUNDARY_WIDTH + BOUNDARY_WIDTH/2,
+              y: i * BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2
+            }
+          )
+        )
+        break
     }
   })
 })
@@ -383,6 +415,13 @@ let frameId = ""
 function animate() {
   frameId = window.requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
+
+
+  if (pallets.length == 0) {
+    console.log("Player got all palets")
+    alert("You WIN. Your final score is " + score)
+    window.cancelAnimationFrame(frameId)
+  }
 
   if (keys.w.pressed && last_key == "w") {
     for(let i = 0; i < boundaries.length; i++) {
@@ -436,6 +475,26 @@ function animate() {
   //   }
   // })
 
+  for (let i = powerups.length - 1; i >= 0; i--) {
+    let powerup = powerups[i]
+    powerup.draw()
+    let dist = Math.hypot((powerup.position.x - player.position.x), (powerup.position.y - player.position.y))
+    if (dist < powerup.radius + player.radius) {
+      console.log("Player powerup collision")
+      powerups.splice(i, 1)
+      ghosts.forEach(g => {
+        g.scared = true
+      })
+
+      setTimeout(() => {
+        console.log("Setting scared offs")
+        ghosts.forEach(g => {
+          g.scared = false
+        })
+      }, 10000)
+    }
+  }
+
   for (let i = pallets.length - 1; i >= 0; i--) {
     let pallet = pallets[i]
     pallet.draw()
@@ -460,15 +519,20 @@ function animate() {
   })
   player.update()
 
-  for (let i=0; i<ghosts.length; i++) {
+  for (let i=ghosts.length-1; i>=0; i--) {
     let ghost = ghosts[i]
     ghost.update()
 
     let dist = Math.hypot((ghost.position.x - player.position.x), (ghost.position.y - player.position.y))
     if (dist < ghost.radius + player.radius) {
-      console.log("Player ghost collision")
-      window.cancelAnimationFrame(frameId)
-      alert("You Lost. Your final score is " + score)
+
+      if (ghost.scared) {
+        ghosts.splice(i, 1)
+      } else {
+        console.log("Player ghost collision")
+        window.cancelAnimationFrame(frameId)
+        alert("You Lost. Your final score is " + score)
+      }
     }
 
 
@@ -511,7 +575,6 @@ function animate() {
     else if (ghost.velocity.y < 0) {
       ghost_direction = "up"
     }
-    console.log("pathways, ghost_direction", pathways, ghost_direction)
 
     if (!pathways.includes(ghost_direction) || pathways.length > DIRECTIONS.length/2) {
 
