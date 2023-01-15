@@ -20,11 +20,28 @@ class Boundary {
   }
 }
 
-let boundary1 = new Boundary({x: 0, y: 0})
-boundary1.draw()
+let map = [
+  ["-", "-", "-", "-", "-", "-"],
+  ["-", " ", " ", " ", " ", "-"],
+  ["-", " ", " ", " ", " ", "-"],
+  ["-", "-", "-", "-", "-", "-"]
+]
 
-let boundary2 = new Boundary({x: 40, y: 0})
-boundary2.draw()
+let boundaries = []
 
-let boundary3 = new Boundary({x: 80, y: 0})
-boundary3.draw()
+map.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    console.log(symbol)
+    switch(symbol) {
+      case "-":
+        positionX = 40*j
+        positionY = 40*i
+        boundaries.push(new Boundary({x:positionX, y:positionY}))
+        break
+    }
+  })
+})
+
+boundaries.forEach(boundary => {
+  boundary.draw()
+})
