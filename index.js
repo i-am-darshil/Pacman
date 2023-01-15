@@ -9,11 +9,12 @@ let score = 0
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-BOUNDARY_WIDTH = 40
-BOUNDARY_HEIGHT = 40
+let BOUNDARY_WIDTH = 40
+let BOUNDARY_HEIGHT = 40
 
-PLAYER_SPEED = 2
+let PLAYER_SPEED = 2
 
+let DIRECTIONS = ["left", "right", "up", "down"]
 class Boundary {
   constructor(position, image) {
     this.position = position
@@ -456,6 +457,56 @@ function animate() {
   for (let i=0; i<ghosts.length; i++) {
     let ghost = ghosts[i]
     ghost.update()
+
+    let collisions = []
+    let pathways = []
+    boundaries.forEach(boundary => {
+
+      if (!collisions.includes("up") && circleCollidesWithSquare({...ghost, velocity: {x: 0, y: -PLAYER_SPEED}}, boundary)) {
+        collisions.push("up")
+      }
+
+      if (!collisions.includes("down") && circleCollidesWithSquare({...ghost, velocity: {x: 0, y: PLAYER_SPEED}}, boundary)) {
+        collisions.push("down")
+      }
+
+      if (!collisions.includes("left") && circleCollidesWithSquare({...ghost, velocity: {x: -PLAYER_SPEED, y: 0}}, boundary)) {
+        collisions.push("left")
+      }
+
+      if (!collisions.includes("right") && circleCollidesWithSquare({...ghost, velocity: {x: PLAYER_SPEED, y: 0}}, boundary)) {
+        collisions.push("right")
+      }
+
+    })
+
+    DIRECTIONS.forEach(d => {
+      if (!collisions.includes(d)) {pathways.push(d)}
+    })
+    // console.log(pathways)
+    
+    let pathIndex = Math.floor(Math.random() * pathways.length);
+    let path = pathways[pathIndex]
+
+    switch(path) {
+      case "up":
+        ghost.velocity.x = 0
+        ghost.velocity.y = -PLAYER_SPEED
+        break
+      case "down":
+        ghost.velocity.x = 0
+        ghost.velocity.y = PLAYER_SPEED
+        break
+      case "left":
+        ghost.velocity.x = -PLAYER_SPEED
+        ghost.velocity.y = 0
+        break
+      case "right":
+        ghost.velocity.x = PLAYER_SPEED
+        ghost.velocity.y = 0
+        break
+    }
+
   }
 
 }
