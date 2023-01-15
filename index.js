@@ -35,6 +35,7 @@ class Player {
     this.position = position
     this.velocity = velocity
     this.radius = 18
+    this.radians = 0.75
     /*
     Relationship between Velocity and radius of player
     size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
@@ -43,7 +44,9 @@ class Player {
 
   draw() {
     c.beginPath()
-    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    // Direction of angle movement is clockwise
+    c.arc(this.position.x, this.position.y, this.radius, this.radians, Math.PI * 2 - this.radians)
+    c.lineTo(this.position.x, this.position.y)
     c.fillStyle = "yellow"
     c.fill()
     c.closePath()
@@ -491,7 +494,7 @@ function animate() {
         ghosts.forEach(g => {
           g.scared = false
         })
-      }, 10000)
+      }, 5000)
     }
   }
 
