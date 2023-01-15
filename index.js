@@ -70,3 +70,25 @@ boundaries.forEach(boundary => {
 })
 
 player.draw()
+
+window.addEventListener('keydown', (event) => {
+  let key = event.key
+  console.log("Key pressed", event, key)
+
+  switch(key) {
+    case "w":
+      player.velocity.y = -5
+      break;
+    case "a":
+      player.velocity.x = 5
+      break;
+    case "s":
+      player.velocity.y = 5
+      break;
+    case "d":
+      player.velocity.x = 5
+      break;
+  }
+
+  console.log(player.velocity)
+})
