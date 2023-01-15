@@ -73,14 +73,16 @@ map.forEach((row, i) => {
 
 function animate() {
   window.requestAnimationFrame(animate)
+  c.clearRect(0, 0, canvas.width, canvas.height)
+  boundaries.forEach(boundary => {
+    boundary.draw()
+  })
   player.update()
 }
 
 animate()
 
-boundaries.forEach(boundary => {
-  boundary.draw()
-})
+
 
 
 window.addEventListener('keydown', (event) => {
@@ -89,16 +91,20 @@ window.addEventListener('keydown', (event) => {
 
   switch(key) {
     case "w":
+      player.velocity.x = 0
       player.velocity.y = -5
       break;
     case "a":
       player.velocity.x = -5
+      player.velocity.y = 0
       break;
     case "s":
+      player.velocity.x = 0
       player.velocity.y = 5
       break;
     case "d":
       player.velocity.x = 5
+      player.velocity.y = 0
       break;
   }
 
