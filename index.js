@@ -3,6 +3,9 @@ console.log(canvas)
 
 let c = canvas.getContext('2d')
 
+let scoreEl = document.querySelector('#score')
+let score = 0
+
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
@@ -399,6 +402,8 @@ function animate() {
     if (dist < pallet.radius + player.radius) {
       console.log("Player pallet collision")
       pallets.splice(i, 1)
+      score += 10
+      scoreEl.innerHTML = score
     }
   }
 
