@@ -139,6 +139,11 @@ let ghosts = [
   new Ghost(
     {x:BOUNDARY_WIDTH * 6 + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2},
     {x:PLAYER_SPEED, y:0}
+  ),
+  new Ghost(
+    {x:BOUNDARY_WIDTH * 6 + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT*7 + BOUNDARY_HEIGHT/2},
+    {x:PLAYER_SPEED, y:0},
+    "pink"
   )
 ]
 
@@ -374,8 +379,9 @@ function circleCollidesWithSquare(circle, square) {
   )
 }
 
+let frameId = ""
 function animate() {
-  window.requestAnimationFrame(animate)
+  frameId = window.requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
 
   if (keys.w.pressed && last_key == "w") {
@@ -457,6 +463,14 @@ function animate() {
   for (let i=0; i<ghosts.length; i++) {
     let ghost = ghosts[i]
     ghost.update()
+
+    let dist = Math.hypot((ghost.position.x - player.position.x), (ghost.position.y - player.position.y))
+    if (dist < ghost.radius + player.radius) {
+      console.log("Player ghost collision")
+      window.cancelAnimationFrame(frameId)
+      alert("You Lost. Your final score is " + score)
+    }
+
 
     let collisions = []
     let pathways = []
