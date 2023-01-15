@@ -76,6 +76,30 @@ function animate() {
   c.clearRect(0, 0, canvas.width, canvas.height)
   boundaries.forEach(boundary => {
     boundary.draw()
+
+    let playerTop = player.position.y - player.radius
+    let playerBottom = player.position.y + player.radius
+    let playerLeft = player.position.x - player.radius
+    let playerRight = player.position.x + player.radius
+
+    let boundaryTop = boundary.position.y
+    let boundaryBottom = boundary.position.y + BOUNDARY_HEIGHT
+    let boundaryLeft = boundary.position.x
+    let boundaryRight = boundary.position.x + BOUNDARY_WIDTH
+
+    if (
+      playerTop <= boundaryBottom &&
+      playerBottom >= boundaryTop &&
+      playerLeft <= boundaryRight &&
+      playerRight >= boundaryLeft
+    ) {
+      console.log("COLLISION")
+      player.velocity.x = 0
+      player.velocity.y = 0
+    }
+
+
+
   })
   player.update()
 }
@@ -86,24 +110,24 @@ animate()
 
 
 window.addEventListener('keydown', (event) => {
-  let key = event.key
+  let key = event.key.toLowerCase()
   console.log("Key pressed", event, key)
 
   switch(key) {
     case "w":
       player.velocity.x = 0
-      player.velocity.y = -5
+      player.velocity.y = -1
       break;
     case "a":
-      player.velocity.x = -5
+      player.velocity.x = -1
       player.velocity.y = 0
       break;
     case "s":
       player.velocity.x = 0
-      player.velocity.y = 5
+      player.velocity.y = 1
       break;
     case "d":
-      player.velocity.x = 5
+      player.velocity.x = 1
       player.velocity.y = 0
       break;
   }
