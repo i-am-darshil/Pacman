@@ -69,8 +69,9 @@ let keys = {
   }
 }
 
+let last_key = ""
+
 let boundaries = []
-// let player = new Player({x:40, y:40}, {x:0, y: 0})
 let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
 
 
@@ -93,13 +94,13 @@ function animate() {
 
   player.velocity.x = 0
   player.velocity.y = 0
-  if (keys.w.pressed) {
+  if (keys.w.pressed && last_key == "w") {
     player.velocity.y = -PLAYER_SPEED
-  } else if (keys.a.pressed) {
+  } else if (keys.a.pressed && last_key == "a") {
     player.velocity.x = -PLAYER_SPEED
-  } else if (keys.s.pressed) {
+  } else if (keys.s.pressed && last_key == "s") {
     player.velocity.y = PLAYER_SPEED
-  } else if (keys.d.pressed) {
+  } else if (keys.d.pressed && last_key == "d") {
     player.velocity.x = PLAYER_SPEED
   }
 
@@ -140,6 +141,7 @@ animate()
 window.addEventListener('keydown', (event) => {
   let key = event.key.toLowerCase()
   console.log("Key pressed", event, key)
+  last_key = key
 
   switch(key) {
     case "w":
