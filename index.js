@@ -55,6 +55,33 @@ class Player {
   }
 }
 
+class Ghost {
+  constructor(position, velocity, color = "red") {
+    this.position = position
+    this.velocity = velocity
+    this.radius = 18
+    this.color = color
+    /*
+    Relationship between Velocity and radius of player
+    size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
+     */
+  }
+
+  draw() {
+    c.beginPath()
+    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
+    c.fillStyle = this.color
+    c.fill()
+    c.closePath()
+  }
+
+  update() {
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+  }
+}
+
 class Pallet {
   constructor(position) {
     this.position = position
@@ -107,6 +134,13 @@ let last_key = ""
 
 let pallets = []
 let boundaries = []
+let ghosts = [
+  new Ghost(
+    {x:BOUNDARY_WIDTH * 6 + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2},
+    {x:0, y:0}
+  )
+]
+
 let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
 
 function createImage(src) {
@@ -418,6 +452,12 @@ function animate() {
 
   })
   player.update()
+
+  for (let i=0; i<ghosts.length; i++) {
+    let ghost = ghosts[i]
+    ghost.update()
+  }
+
 }
 
 animate()
