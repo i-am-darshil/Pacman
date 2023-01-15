@@ -6,12 +6,15 @@ let c = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
+BOUNDARY_WIDTH = 40
+BOUNDARY_HEIGHT = 40
+
 
 class Boundary {
   constructor(position) {
     this.position = position
-    this.width = 40
-    this.height = 40
+    this.width = BOUNDARY_WIDTH
+    this.height = BOUNDARY_HEIGHT
   }
 
   draw() {
@@ -23,6 +26,7 @@ class Boundary {
 let map = [
   ["-", "-", "-", "-", "-", "-"],
   ["-", " ", " ", " ", " ", "-"],
+  ["-", " ", "-", "-", " ", "-"],
   ["-", " ", " ", " ", " ", "-"],
   ["-", "-", "-", "-", "-", "-"]
 ]
@@ -34,8 +38,8 @@ map.forEach((row, i) => {
     console.log(symbol)
     switch(symbol) {
       case "-":
-        positionX = 40*j
-        positionY = 40*i
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
         boundaries.push(new Boundary({x:positionX, y:positionY}))
         break
     }
