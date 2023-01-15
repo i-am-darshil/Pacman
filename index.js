@@ -53,13 +53,13 @@ class Player {
 }
 
 let map = [
-  ["-", "-", "-", "-", "-", "-", "-"],
-  ["-", " ", " ", " ", " ", " ", "-"],
-  ["-", " ", "-", " ", "-", " ", "-"],
-  ["-", " ", " ", " ", " ", " ", "-"],
-  ["-", " ", "-", " ", "-", " ", "-"],
-  ["-", " ", " ", " ", " ", " ", "-"],
-  ["-", "-", "-", "-", "-", "-", "-"]
+  ["1", "-", "-", "-", "-", "-", "2"],
+  ["|", " ", " ", " ", " ", " ", "|"],
+  ["|", " ", "b", " ", "b", " ", "|"],
+  ["|", " ", " ", " ", " ", " ", "|"],
+  ["|", " ", "b", " ", "b", " ", "|"],
+  ["|", " ", " ", " ", " ", " ", "|"],
+  ["4", "-", "-", "-", "-", "-", "3"]
 ]
 
 let keys = {
@@ -82,8 +82,12 @@ let last_key = ""
 let boundaries = []
 let player = new Player({x:BOUNDARY_WIDTH + BOUNDARY_WIDTH/2, y:BOUNDARY_HEIGHT + BOUNDARY_HEIGHT/2}, {x:0, y: 0})
 
-let image = new Image()
-image.src = "./img/pipeHorizontal.png"
+function createImage(src) {
+  let image = new Image()
+  image.src = src
+
+  return image
+}
 
 map.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -93,7 +97,49 @@ map.forEach((row, i) => {
         positionX = BOUNDARY_WIDTH*j
         positionY = BOUNDARY_HEIGHT*i
         boundaries.push(
-          new Boundary({x:positionX, y:positionY}, image)
+          new Boundary({x:positionX, y:positionY}, createImage('./img/pipeHorizontal.png'))
+        )
+        break
+      case "|":
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, createImage('./img/pipeVertical.png'))
+        )
+        break
+      case "1":
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, createImage('./img/pipeCorner1.png'))
+        )
+        break
+      case "2":
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, createImage('./img/pipeCorner2.png'))
+        )
+        break
+      case "3":
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, createImage('./img/pipeCorner3.png'))
+        )
+        break
+      case "4":
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, createImage('./img/pipeCorner4.png'))
+        )
+        break
+      case "b":
+        positionX = BOUNDARY_WIDTH*j
+        positionY = BOUNDARY_HEIGHT*i
+        boundaries.push(
+          new Boundary({x:positionX, y:positionY}, createImage('./img/block.png'))
         )
         break
     }
