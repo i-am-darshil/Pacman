@@ -9,7 +9,7 @@ canvas.height = window.innerHeight
 BOUNDARY_WIDTH = 40
 BOUNDARY_HEIGHT = 40
 
-PLAYER_SPEED = 3
+PLAYER_SPEED = 2
 
 class Boundary {
   constructor(position) {
@@ -28,7 +28,7 @@ class Player {
   constructor(position, velocity) {
     this.position = position
     this.velocity = velocity
-    this.radius = 17
+    this.radius = 18
     /*
     Relationship between Velocity and radius of player
     size of each cell (BOUNDARY_WIDTH or BOUNDARY_HEIGHT) = 2 * radius + veloctiy
@@ -92,40 +92,76 @@ map.forEach((row, i) => {
   })
 })
 
+function circleCollidesWithSquare(circle, square) {
+  let circleTop = circle.position.y - circle.radius
+  let circleBottom = circle.position.y + circle.radius
+  let circleLeft = circle.position.x - circle.radius
+  let circleRight = circle.position.x + circle.radius
+
+  let squareTop = square.position.y
+  let squareBottom = square.position.y + BOUNDARY_HEIGHT
+  let squareLeft = square.position.x
+  let squareRight = square.position.x + BOUNDARY_WIDTH
+
+  return (
+    circleTop + circle.velocity.y <= squareBottom &&
+    circleBottom + circle.velocity.y >= squareTop &&
+    circleLeft + circle.velocity.x <= squareRight &&
+    circleRight + circle.velocity.x >= squareLeft
+  )
+}
+
 function animate() {
   window.requestAnimationFrame(animate)
   c.clearRect(0, 0, canvas.width, canvas.height)
 
   if (keys.w.pressed && last_key == "w") {
-    player.velocity.y = -PLAYER_SPEED
+    for(let i = 0; i < boundaries.length; i++) {
+      let boundary = boundaries[i]
+      if (circleCollidesWithSquare({...player, velocity: {x: 0, y: -PLAYER_SPEED}}, boundary)) {
+        player.velocity.y = 0
+        break
+      } else {
+        player.velocity.y = -PLAYER_SPEED
+      }
+    }
   } else if (keys.a.pressed && last_key == "a") {
-    player.velocity.x = -PLAYER_SPEED
+    for(let i = 0; i < boundaries.length; i++) {
+      let boundary = boundaries[i]
+      if (circleCollidesWithSquare({...player, velocity: {x: -PLAYER_SPEED, y: -0}}, boundary)) {
+        player.velocity.x = 0
+        break
+      } else {
+        player.velocity.x = -PLAYER_SPEED
+      }
+    }
   } else if (keys.s.pressed && last_key == "s") {
-    player.velocity.y = PLAYER_SPEED
+    for(let i = 0; i < boundaries.length; i++) {
+      let boundary = boundaries[i]
+      if (circleCollidesWithSquare({...player, velocity: {x: 0, y: PLAYER_SPEED}}, boundary)) {
+        player.velocity.y = 0
+        break
+      } else {
+        player.velocity.y = PLAYER_SPEED
+      }
+    }
   } else if (keys.d.pressed && last_key == "d") {
-    player.velocity.x = PLAYER_SPEED
+    for(let i = 0; i < boundaries.length; i++) {
+      let boundary = boundaries[i]
+      if (circleCollidesWithSquare({...player, velocity: {x: PLAYER_SPEED, y: -0}}, boundary)) {
+        player.velocity.x = 0
+        break
+      } else {
+        player.velocity.x = PLAYER_SPEED
+      }
+    }
   }
 
 
   boundaries.forEach(boundary => {
     boundary.draw()
 
-    let playerTop = player.position.y - player.radius
-    let playerBottom = player.position.y + player.radius
-    let playerLeft = player.position.x - player.radius
-    let playerRight = player.position.x + player.radius
-
-    let boundaryTop = boundary.position.y
-    let boundaryBottom = boundary.position.y + BOUNDARY_HEIGHT
-    let boundaryLeft = boundary.position.x
-    let boundaryRight = boundary.position.x + BOUNDARY_WIDTH
-
-    if (
-      playerTop + player.velocity.y <= boundaryBottom &&
-      playerBottom + player.velocity.y >= boundaryTop &&
-      playerLeft + player.velocity.x <= boundaryRight &&
-      playerRight + player.velocity.x >= boundaryLeft
-    ) {
+    if (circleCollidesWithSquare(player, boundary)) {
       console.log("COLLISION")
       player.velocity.x = 0
       player.velocity.y = 0
